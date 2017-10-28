@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Gestor de Productos</title>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <link type="text/css" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    </head>
+    <body class="container">
+        <header class="jumbotron"> 
+            <div class="row">
+                <a th:href="@{?lang=es}"><img src="/images/es.jpg"/></a>
+                <a th:href="@{?lang=en}"><img src="/images/en.jpg"/></a>
+            </div>
+            <div class="row">
+                <a th:href="@{/}"><h1 th:text="#{welcome}"></h1></a>
+            </div>
+        </header>
+        <div class="row">
+            <aside class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                <ul class="list-group">
+                    <li class="list-group-item"><a th:href="@{/products}"><span th:text="#{productList}"></span></a></li>
+                    <li class="list-group-item"><a th:href="@{/products/forms}"><span th:text="#{newProduct}"></span></a></li>
+                </ul>
+            </aside>
+            <section class="col-lg-9 col-md-9 col-sm-9 col-xs-9"></section>
+        </div>
+        <footer></footer>
+    </body>
+</html>
