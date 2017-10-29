@@ -1,10 +1,11 @@
 package es.urjc.products.Controller;
 
 import es.urjc.products.Model.Product;
+import es.urjc.products.Repository.ProductRepository;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import javax.servlet.http.HttpSession;
+import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,29 +20,33 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class ProductController {
     //Atributter
+    @Autowired
+    private ProductRepository productRepository;
+    
     private final List<Product> products = new ArrayList<>();
     
+    //PathMethods
     @RequestMapping(value="/", method=RequestMethod.GET)
     public ModelAndView home(){
         return new ModelAndView("home_template");
     }
     
     @RequestMapping(value="/products", method=RequestMethod.POST)
-    public String createProduct(@RequestParam("id") int id, @RequestParam("name") String name, 
+    public String createProduct(@RequestParam(value="id", required=false) Long id, @RequestParam("name") String name, 
                                 @RequestParam("description") String description, @RequestParam("price") double price){
-        if(id == -1){
-            Product product = new Product(name, description, price);
-            this.products.add(product);
+        if(id == null){
+            this.productRepository.save(new Product(name,description,price));
             return "redirect:/";
         }else{
-            changeProduct(id, name, description, price);
+            this.productRepository.save(new Product(id,name,description,price));
             return "redirect:/";
         }
     }
     
     @RequestMapping(value="/products", method=RequestMethod.GET)
     public ModelAndView listProducts(){
-        return new ModelAndView("listProducts_template").addObject("products", this.products);
+        List<Product> products = this.productRepository.selectAll();
+        return new ModelAndView("listProducts_template").addObject("products", products);
     }
     
     @RequestMapping(value="/products/forms", method=RequestMethod.GET)
@@ -50,45 +55,29 @@ public class ProductController {
     }
     
     @RequestMapping(value="/products/{id}/forms", method=RequestMethod.GET)
-    public ModelAndView editProduct(@PathVariable int id){
-        Product product = extractProduct(id);
+    public ModelAndView editProduct(@PathVariable long id){
+        Product product = this.productRepository.findOne(id);
         return new ModelAndView("formProduct_template").addObject(product);
     }
     
     @RequestMapping(value="/products/{id}", method=RequestMethod.GET)
-    public ModelAndView getProduct(@PathVariable int id){
-        Product product = extractProduct(id);
+    public ModelAndView getProduct(@PathVariable long id){
+        Product product = this.productRepository.findOne(id);
         return new ModelAndView("product_template").addObject(product);
     }
     
     @RequestMapping(value="/products/{id}", method=RequestMethod.DELETE)
-    public String deleteProduct(@PathVariable int id){
-        this.products.remove(id);
+    public String deleteProduct(@PathVariable long id){
+        this.productRepository.delete(id);
         return "redirect:/products";
     }
-    
-    private Product extractProduct(int id){
-        Product product = null;
-        Iterator listIterator = this.products.iterator();
-        while(listIterator.hasNext()){
-            product = (Product)listIterator.next();
-            if(product.getId() == id){
-                return product;
-            }
-        }
-        return product;
-    }
-    
-    private void changeProduct(int id, String name, String description, double price){
-        Iterator listIterator = this.products.iterator();
-        while(listIterator.hasNext()){
-            Product product = (Product)listIterator.next();
-            if(product.getId() == id){
-                product.setName(name);
-                product.setDescription(description);
-                product.setPrice(price);
-            }
-        }
+        
+    //Init
+    @PostConstruct
+    private void initDataBase(){
+        productRepository.save(new Product("a","a",1));
+        productRepository.save(new Product("b","b",2));
+        productRepository.save(new Product("c","c",3));
     }
     
     

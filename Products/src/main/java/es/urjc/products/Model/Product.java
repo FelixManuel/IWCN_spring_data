@@ -1,28 +1,42 @@
 package es.urjc.products.Model;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
 /**
  * @author Felix Manuel Mellado
  */
+@Entity
 public class Product {
     //Attributes
-    private int id;
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    private long id;
+    
     private String name;
     private String description;
     private double price;
     
-    //Temporal Attribute
-    private static int count = 0;
-    
     //Constructor
+    public Product(){}
+    
     public Product(String name, String description, double price){
-        this.id = count++;
+        this.name = name;
+        this.description = description;
+        this.price = price;
+    }
+    
+    public Product(long id, String name, String description, double price){
+        this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
     }
     
     //Getter method
-    public int getId(){
+    public long getId(){
         return this.id;
     }
     
@@ -38,11 +52,7 @@ public class Product {
         return this.price;
     }
     
-    //Setter method
-    public void setId(int id){
-        this.id = id;
-    }
-    
+    //Setter method    
     public void setName(String name){
         this.name = name;
     }

@@ -27,9 +27,9 @@
             </aside>
             <section class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
                 <form id="createProduct" class="form-horizontal" role="form" action="/products" method="post">
-                    <div class="form-group">
+                    <div th:if="${product != null}" class="form-group">
                         <label class="control-label col-lg-3 col-md-3 col-sm-3 col-xs-3" for="id">Id:</label> 
-                        <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9"><input class="form-control" type="text" name="id" readonly="true" th:value="${product != null}? ${product.id}:-1"/></div>
+                        <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9"><input class="form-control" type="text" name="id" readonly="true" th:value="${product.id}"/></div>
                     </div>
                     <div class="form-group">
                         <label class="control-label col-lg-3 col-md-3 col-sm-3 col-xs-3" for="name"><span th:text="#{productName}"></span>:</label>

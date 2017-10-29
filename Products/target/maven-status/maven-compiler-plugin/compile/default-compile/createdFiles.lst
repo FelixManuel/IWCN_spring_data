@@ -1,3 +1,4 @@
+es\urjc\products\Repository\ProductRepository.class
 es\urjc\products\Model\Product.class
 es\urjc\products\Controller\ProductController.class
 es\urjc\products\App.class
